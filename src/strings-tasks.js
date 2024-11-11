@@ -38,7 +38,7 @@ function getStringLength(string) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-  return typeof value === 'string';
+  return typeof value?.valueOf() === 'string';
 }
 
 /**
@@ -69,7 +69,7 @@ function concatenateStrings(string1, string2) {
  *   getFirstChar('') => ''
  */
 function getFirstChar(string) {
-  return string[0];
+  return string.charAt(0);
 }
 
 /**
@@ -172,10 +172,13 @@ function removeLastOccurrences(string, removeValue) {
   let iterator = string;
   let lastIndex = iterator.indexOf(removeValue);
   while (lastIndex !== -1) {
-    iterator = iterator.replace(removeValue, ''.repeat(removeValue.length));
+    iterator = iterator.replace(removeValue, '.'.repeat(removeValue.length));
+    if (iterator.indexOf(removeValue) === -1) {
+      break;
+    }
     lastIndex = iterator.indexOf(removeValue);
   }
-  return string.slice(lastIndex, lastIndex + removeValue.length - 1);
+  return string.slice(0, lastIndex);
 }
 
 /**
@@ -192,7 +195,7 @@ function removeLastOccurrences(string, removeValue) {
  */
 function sumOfCodes(str) {
   let sum = 0;
-  str.split('').forEach((char, idx) => {
+  str?.split('').forEach((char, idx) => {
     const charCode = str.charCodeAt(idx);
     sum += typeof charCode === 'number' ? charCode : 0;
   });
@@ -269,7 +272,7 @@ function formatTime(minutes, seconds) {
  *   reverseString('12345') => '54321'
  */
 function reverseString(str) {
-  return str.split('').reverse().join();
+  return str.split('').reverse().join('');
 }
 
 /**
@@ -284,8 +287,7 @@ function reverseString(str) {
  *   orderAlphabetically('abc123xyz') => '123abcxyz'
  */
 function orderAlphabetically(str) {
-  str.split('').sort();
-  return str.join();
+  return str.split('').sort().join('');
 }
 
 /**
