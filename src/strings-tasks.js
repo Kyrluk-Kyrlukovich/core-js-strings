@@ -38,7 +38,7 @@ function getStringLength(string) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-  return typeof value?.valueOf() === 'string';
+  return value ? typeof value.valueOf() === 'string' : false;
 }
 
 /**
@@ -195,10 +195,13 @@ function removeLastOccurrences(string, removeValue) {
  */
 function sumOfCodes(str) {
   let sum = 0;
-  str?.split('').forEach((char, idx) => {
-    const charCode = str.charCodeAt(idx);
-    sum += typeof charCode === 'number' ? charCode : 0;
-  });
+  if (str) {
+    str.split('').forEach((char, idx) => {
+      const charCode = str.charCodeAt(idx);
+      sum += typeof charCode === 'number' ? charCode : 0;
+    });
+  }
+
   return sum;
 }
 
