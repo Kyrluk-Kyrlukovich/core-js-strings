@@ -38,6 +38,9 @@ function getStringLength(string) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
+  if (typeof value === 'string') {
+    return true;
+  }
   return value ? typeof value.valueOf() === 'string' : false;
 }
 
@@ -54,7 +57,7 @@ function isString(value) {
  *   concatenateStrings('', 'bb') => 'bb'
  */
 function concatenateStrings(string1, string2) {
-  return string1 + string2;
+  return string1.concat(string2);
 }
 
 /**
@@ -99,7 +102,7 @@ function removeLeadingAndTrailingWhitespaces(string) {
  *   removeLeadingWhitespaces('\t\t\tHello, World! ') => 'Hello, World! '
  */
 function removeLeadingWhitespaces(string) {
-  return string.trimLeft();
+  return string.trimStart();
 }
 
 /**
@@ -114,7 +117,7 @@ function removeLeadingWhitespaces(string) {
  *   removeTrailingWhitespaces('\t\t\tHello, World! ') => '\t\t\tHello, World!'
  */
 function removeTrailingWhitespaces(string) {
-  return string.trimRight();
+  return string.trimEnd();
 }
 
 /**
@@ -152,8 +155,13 @@ function repeatString(string, repeatCount) {
  *   removeFirstOccurrences('I like legends', 'end') => 'I like legs'.
  *   removeFirstOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
-function removeFirstOccurrences(str, removeValue) {
-  return str.replace(removeValue, '');
+function removeFirstOccurrences(string, removeValue) {
+  const match = string.indexOf(removeValue);
+  let result = string;
+  if (match !== -1) {
+    result = string.slice(0, match) + string.slice(match + removeValue.length);
+  }
+  return result;
 }
 
 /**
@@ -169,16 +177,12 @@ function removeFirstOccurrences(str, removeValue) {
  *   removeLastOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
 function removeLastOccurrences(string, removeValue) {
-  let iterator = string;
-  let lastIndex = iterator.indexOf(removeValue);
-  while (lastIndex !== -1) {
-    iterator = iterator.replace(removeValue, '.'.repeat(removeValue.length));
-    if (iterator.indexOf(removeValue) === -1) {
-      break;
-    }
-    lastIndex = iterator.indexOf(removeValue);
+  const match = string.lastIndexOf(removeValue);
+  let result = string;
+  if (match !== -1) {
+    result = string.slice(0, match) + string.slice(match + removeValue.length);
   }
-  return string.slice(0, lastIndex);
+  return result;
 }
 
 /**
@@ -249,19 +253,15 @@ function endsWith(str, substr) {
  *   formatTime(0, 0) => "00:00"
  */
 function formatTime(minutes, seconds) {
-  let min = '';
-  let sec = '';
-  if (minutes >= 10) {
-    min += minutes;
-  } else {
-    min += `0${minutes}`;
+  let min = `${minutes}`;
+  let sec = `${seconds}`;
+  if (minutes < 10) {
+    min = min.padStart(2, '0');
   }
-  if (seconds >= 10) {
-    sec += seconds;
-  } else {
-    sec += `0${seconds}`;
+  if (seconds < 10) {
+    sec = sec.padStart(2, '0');
   }
-  return `${min}:${sec}`;
+  return min.concat(':', sec);
 }
 
 /**
@@ -377,16 +377,15 @@ function isPalindrome(str) {
  *   findLongestWord('No words here') => 'words'
  */
 function findLongestWord(sentence) {
-  const sortedArr = sentence.split(' ').sort((a, b) => {
-    let valueForSorted = 0;
+  const sortedArr = sentence.split(' ');
+  sortedArr.sort((a, b) => {
+    let valueForSorted = 1;
     if (a.length > b.length) {
       valueForSorted = -1;
-    } else if (a.length < b.length) valueForSorted = 1;
-    valueForSorted = 0;
+    }
 
     return valueForSorted;
   });
-
   return sortedArr[0];
 }
 
@@ -506,9 +505,7 @@ function unbracketTag(str) {
 function extractEmails(str) {
   const strIntoArrEmails = str.split(';');
 
-  return strIntoArrEmails.map((email) => {
-    return email.slice(email.indexOf('.') + 1);
-  });
+  return strIntoArrEmails;
 }
 
 /**
